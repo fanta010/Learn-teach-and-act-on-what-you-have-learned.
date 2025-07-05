@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>تصفح القرآن الكريم</title>
+    <link href="https://fonts.googleapis.com/css?family=Cairo:400,700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Cairo', Arial, sans-serif; background: #f9f9f9; padding: 20px; direction: rtl; text-align: right; }
+        h1 { color: #1565c0; text-align: center; }
+        .surah-list { list-style: none; padding: 0; max-width: 600px; margin: auto; }
+        .surah-item { background: #e0f2f1; margin: 10px 0; padding: 12px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .ayahs { background: #fff; padding: 15px; border-radius: 8px; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: none; }
+        .ayah { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>📖 تصفح القرآن الكريم</h1>
+    <ul class="surah-list" id="surahList"></ul>
+    <script>
+        fetch('quran.json')
+        .then(res => res.json())
+        .then(data => {
+            const surahList = document.getElementById('surahList');
+            data.surahs.forEach(surah => {
+                const item = document.createElement('li');
+                item.className = 'surah-item';
+                item.textContent = surah.name;
+                const ayahsDiv = document.createElement('div');
+                ayahsDiv.className = 'ayahs';
+                surah.ayahs.forEach(ayah => {
+                    const a = document.createElement('div');
+                    a.className = 'ayah';
+                    a.textContent = `${ayah.number}. ${ayah.text}`;
+                    ayahsDiv.appendChild(a);
+                });
+                item.addEventListener('click', () => {
+                    ayahsDiv.style.display = ayahsDiv.style.display === 'block' ? 'none' : 'block';
+                });
+                surahList.appendChild(item);
+                surahList.appendChild(ayahsDiv);
+            });
+        });
+    </script>
+</body>
+</html>
